@@ -1,12 +1,10 @@
-# Time Rift Joshua D
-
 Time Rift
 
 “Blaze through Past & Future”
 
 Version 1
 
-All work Copyright © 2024 by Idolminds Games.
+All work Copyright © 2025 by Idolminds Games.
 
 All rights reserved.
 
@@ -16,61 +14,61 @@ Joshua Desroches
 
 TABLE OF CONTENTS
 
-[VERSION HISTORY 4](#_Toc57492979)
+[VERSION HISTORY](#version-history)
 
-[I. GAME OVERVIEW 5](#_Toc57492980)
+[I. GAME OVERVIEW](#i-game-overview)
 
-[II. GAME PLAY MECHANICS 5](#_Toc57492981)
+[II. GAME PLAY MECHANICS](#ii-game-play-mechanics)
 
-[III. CAMERA 5](#_Toc57492982)
+[III. CAMERA](#iii-camera)
 
-[IV. CONTROLS 5](#_Toc57492983)
+[IV. CONTROLS](#iv-controls)
 
-[V. SAVING AND LOADING 5](#_Toc57492984)
+[V. SAVING AND LOADING](#v-saving-and-loading)
 
-[VI. INTERFACE SKETCH 5](#_Toc57492985)
+[VI. INTERFACE SKETCH](#vi-interface-sketch)
 
-[VII. MENU AND SCREEN DESCRIPTIONS 5](#_Toc57492986)
+[VII. MENU AND SCREEN DESCRIPTIONS](#vii-menu-and-screen-descriptions)
 
-[VIII. GAME WORLD - CREATIVITY! 6](#_Toc57492987)
+[VIII. GAME WORLD - CREATIVITY](#viii-game-world---creativity)
 
-[IX. LEVELS 6](#_Toc57492988)
+[IX. LEVELS](#ix-levels)
 
-[X. GAME PROGRESSION 6](#_Toc57492989)
+[X. GAME PROGRESSION](#x-game-progression)
 
-[XI. CHARACTERS 6](#_Toc57492990)
+[XI. CHARACTERS](#xi-characters)
 
-[XII. NON-PLAYER CHARACTERS 6](#_Toc57492991)
+[XII. NON-PLAYER CHARACTERS](#xii-non-player-characters)
 
-[XIII. ENEMIES 6](#_Toc57492992)
+[XIII. ENEMIES](#xiii-enemies)
 
-[XIV. WEAPONS 6](#_Toc57492993)
+[XIV. WEAPONS](#xiv-weapons)
 
-[XV. ITEMS 7](#_Toc57492994)
+[XV. ITEMS](#xv-items)
 
-[XVI. ABILITIES 7](#_Toc57492995)
+[XVI. ABILITIES](#xvi-abilities)
 
-[XVII. VEHICLES 7](#_Toc57492996)
+[XVII. VEHICLES](#xvii-vehicles)
 
-[XVIII. SCRIPT 7](#_Toc57492997)
+[XVIII. SCRIPT](#xviii-script)
 
-[XIX. SCORING 7](#_Toc57492998)
+[XIX. SCORING](#xix-scoring)
 
-[XX. PUZZLES/MINI-GAMES 7](#_Toc57492999)
+[XX. PUZZLES/MINI-GAMES](#xx-puzzlesmini-games)
 
-[XXI. BONUSES 7](#_Toc57493000)
+[XXI. BONUSES](#xxi-bonuses)
 
-[XXII. CHEAT CODES 7](#_Toc57493001)
+[XXII. CHEAT CODES](#xxii-cheat-codes)
 
-[XXIII. SOUND INDEX 7](#_Toc57493002)
+[XXIII. SOUND INDEX](#xxiii-sound-index)
 
-[XXIV. STORY INDEX 8](#_Toc57493003)
+[XXIV. STORY INDEX](#xxiv-story-index)
 
-[XXV. ART / MULTIMEDIA INDEX 8](#_Toc57493004)
+[XXV. ART / MULTIMEDIA INDEX](#xxv-art--multimedia-index)
 
-[XXVI. DESIGN NOTES 8](#_Toc57493005)
+[XXVI. DESIGN NOTES](#xxvi-design-notes)
 
-[XXVII. FUTURE FEATURES 8](#_Toc57493006)
+[XXVII. FUTURE FEATURES](#xxvii-future-features)
 
 # VERSION HISTORY
 

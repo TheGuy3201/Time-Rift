@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - AppearPlatform
+  - MovingPlatform
+  - TestAppearance
+  - ForestFinish
   layers:
   - Default
   - TransparentFX

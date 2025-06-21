@@ -50,10 +50,10 @@ public class PlatformController : MonoBehaviour
             {
                 SceneManager.LoadScene("Corrupted Caverns");
             }
-            if (this.gameObject.CompareTag("PainPlatform"))
-            {
-                Debug.Log("Still in development!!");
-            }
+            //if (this.gameObject.CompareTag("PainPlatform"))
+            //{
+            //    Debug.Log("Still in development!!");
+            //}
         }
     }
 

@@ -8,12 +8,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float groundCheckDistance = 0.2f; // Adjust as needed
     [SerializeField] LayerMask groundLayer; // Set this in the Inspector
 
+    [SerializeField] AudioSource landingSFX;
+
     private Rigidbody2D rb;
 
     private SpriteRenderer spriteRenderer;
     public bool IsGrounded
     {
         //get => true;
+       
         get => Physics2D.OverlapCircle(groundChecker.position, groundCheckDistance, groundLayer);
     }
 
@@ -36,6 +39,14 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump") && IsGrounded)
         {
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == 3)
+        {
+            landingSFX.Play();
         }
     }
 }

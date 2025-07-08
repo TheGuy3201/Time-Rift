@@ -73,7 +73,7 @@ public class PlatformController : MonoBehaviour
         foreach (GameObject g in platformsA)
         {
             g.SetActive(isAppear);
-            Debug.Log(g.activeSelf);
+            //Debug.Log(g.activeSelf);
         }
     }
 

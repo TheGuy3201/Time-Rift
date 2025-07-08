@@ -1,20 +1,21 @@
-using System;
 using UnityEngine;
 
-public class CannonController : MonoBehaviour
+public class PlayerShooting : MonoBehaviour
 {
     [SerializeField] Transform barrel;
     [SerializeField] Transform muzzle;
-    [SerializeField] float angleSpeed = 0.5f;
     [SerializeField] float bulletSpeed = 15f;
+    [SerializeField] float bulletLife = 3f;
     [SerializeField] Rigidbody2D bullet;
+
+    float angleSpeed = 200f;
 
     private void Update()
     {
         float delta = Input.GetAxis("Vertical");
         barrel.rotation = Quaternion.Euler(barrel.eulerAngles + (angleSpeed * delta * Vector3.forward));
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             FireCannon();
         }
@@ -25,6 +26,7 @@ public class CannonController : MonoBehaviour
         Rigidbody2D rb = Instantiate(bullet, muzzle.position, barrel.rotation);
 
         rb.linearVelocity = rb.transform.right * bulletSpeed;
-        Destroy(rb.gameObject, 1f);
+        
+        Destroy(rb.gameObject, bulletLife);
     }
 }

@@ -6,8 +6,11 @@ TagManager:
   tags:
   - AppearPlatform
   - MovingPlatform
-  - TestAppearance
   - ForestFinish
+  - Enemy
+  - Ground
+  - Bullet
+  - TestAppearance
   layers:
   - Default
   - TransparentFX

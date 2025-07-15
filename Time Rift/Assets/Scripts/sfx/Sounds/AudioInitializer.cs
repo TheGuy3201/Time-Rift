@@ -9,11 +9,6 @@ public class AudioInitializer : MonoBehaviour
         {
             AudioManager.AddSound(sound);
         }
-    }
-
-    private void Start()
-    {
         AudioManager.Play("bg");
     }
-
 }

@@ -20,7 +20,6 @@ public class Sound
 
     public AudioClip clip;
     public AudioMixerGroup mixer;
-
 }
 
 public static class AudioManager
@@ -35,8 +34,9 @@ public static class AudioManager
         {
             GameObject go = new GameObject();
             AudioSource src = go.AddComponent<AudioSource>();
+            MonoBehaviour.DontDestroyOnLoad(src);
             sources.Add(src);
-
+            
         }
     }
 

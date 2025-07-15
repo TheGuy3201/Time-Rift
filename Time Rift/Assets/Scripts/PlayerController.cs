@@ -1,6 +1,9 @@
+using Mono.Cecil;
 using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,11 +11,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float movementSpeed = 5f;
     [SerializeField] float jumpForce = 10f;
     [SerializeField] Transform groundChecker;
-    [SerializeField] float groundCheckDistance = 0.2f; // Adjust as needed
-    [SerializeField] LayerMask groundLayer; // Set this in the Inspector
-
-    [Header("Player Audio Sources")]
-    [SerializeField] AudioSource landingSFX;
+    [SerializeField] float groundCheckDistance = 0.2f; 
+    [SerializeField] LayerMask groundLayer;
 
     //Shooting Stuff
     [Header("Shooting")]
@@ -23,12 +23,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float bulletLife = 3f;
     [SerializeField] Rigidbody2D bullet;
 
+    [Header("Canvas UI")]
+    [SerializeField] Transform uiCanvas;
+    [SerializeField] GameObject healthBar;
+
     //float angleSpeed = 0.5f;
 
     private Rigidbody2D rb;
 
     private SpriteRenderer spriteRenderer;
     private bool isLookingRight = true;
+
+    private Vector3 originalCanvasScale;
+    private float healthAmount = 100f;
+    
 
     public bool IsGrounded
     {
@@ -41,6 +49,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        originalCanvasScale = uiCanvas.localScale;
     }
 
     void Update()
@@ -83,15 +92,18 @@ public class PlayerController : MonoBehaviour
 
         if (direction.x < 0f)
         {
-            transform.localScale = new Vector3(-1f,2f,1f);
+            transform.localScale = new Vector3(-1f, 2f, 1f);
             isLookingRight = false;
         }
-
         else if (direction.x > 0f)
         {
             transform.localScale = new Vector3(1f, 2f, 1f);
             isLookingRight = true;
         }
+
+        // Prevent canvas flip
+        uiCanvas.localScale = originalCanvasScale;
+
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
@@ -103,7 +115,6 @@ public class PlayerController : MonoBehaviour
     {
         Rigidbody2D rb = Instantiate(bullet, muzzle.position, barrel.rotation);
 
-        //AudioManager.Play("shot");
         if (isLookingRight)
         { 
             rb.linearVelocity = rb.transform.right * bulletSpeed; 
@@ -116,11 +127,37 @@ public class PlayerController : MonoBehaviour
         Destroy(rb.gameObject, bulletLife);
     }
 
+    public void TakeDamage(float damage)
+    {
+        AudioManager.Play("PlayerDamage");
+        healthAmount -= damage;
+        healthBar.GetComponent<Slider>().value = healthAmount;
+
+        if (healthAmount <= 0)
+        {
+            Debug.Log("You have died oof");
+
+            SceneManager.LoadScene("MainMenu");
+        }
+    }
+
+    public void Heal(float healingAmount)
+    {
+        AudioManager.Play("PlayerHeal");
+        healthAmount += healingAmount;
+        healthBar.GetComponent<Slider>().value = healthAmount;
+
+        if (healthAmount > 100)
+        {
+            healthAmount = 100;
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.layer == 3)
         {
-            landingSFX.Play();
+            AudioManager.Play("PlayerLanding");
         }
     }
 }

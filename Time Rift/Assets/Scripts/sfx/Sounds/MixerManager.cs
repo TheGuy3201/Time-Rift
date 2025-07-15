@@ -19,7 +19,6 @@ public class MixerManager : MonoBehaviour
     public float GetSFXVolume() => sfxVolume;
     public float SetSFXVolume(float vol) => sfxVolume = vol;
 
-
     private void Awake()
     {
         if (instance != null)
@@ -34,20 +33,15 @@ public class MixerManager : MonoBehaviour
     public void SetMixer_Master()
     {
         mixer.SetFloat("MasterVol", masterVolume);
-        
     }
 
     public void SetMixer_Music()
     {
-        mixer.SetFloat("MusicVol", musicVolume);
-
+        mixer.SetFloat("BackgroundMusicVol", musicVolume);
     }
 
     public void SetMixer_SFX()
     {
         mixer.SetFloat("SFXVol", sfxVolume);
-
     }
-
-
 }

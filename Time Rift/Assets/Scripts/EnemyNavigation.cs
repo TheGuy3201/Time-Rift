@@ -1,49 +1,59 @@
 using Pathfinding;
 using System;
-using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class EnemyNavigation : MonoBehaviour
 {
     [Header("Main Navigation System")]
     [SerializeField] Transform target;
-    [SerializeField] float speed = 200f;
     [SerializeField] float nextPointDistance = 3f;
-    [SerializeField] float maxChaseDistance = 30f;
-    [SerializeField] float minChaseDistance = 7f;
-
 
     [Header("Jumping System")]
     [SerializeField] float jumpForce = 5f;
     [SerializeField] Transform groundChecker;
-    [SerializeField] float groundCheckDistance = 0.2f; // Adjust as needed
-    [SerializeField] LayerMask groundLayer; // Set this in the Inspector
+    [SerializeField] float groundCheckDistance = 0.2f;
+    [SerializeField] LayerMask groundLayer;
 
     [Header("Shooting System")]
-    [SerializeField] float attackSpeed;
-    [SerializeField] string enemyType;
+    [SerializeField] EnemyType enemyType;
+    [SerializeField] EnemyTier enemyTier;
 
     [SerializeField] Rigidbody2D bullet;
     [SerializeField] Transform barrel;
     [SerializeField] Transform muzzle;
-    [SerializeField] float bulletSpeed = 15f;
-    [SerializeField] float bulletLife = 3f;
+
+    [Header("Health System")]
+    [SerializeField] GameObject healthBar;
 
     private bool isLookingRight = true;
 
+    Seeker seeker;
+    Rigidbody2D rb;
     Path path;
     int currentWaypoint = 0;
     bool reachedEnd = false;
 
+    private float minChaseDistance = 7f;
+    private float maxChaseDistance = 30f;
+
+    private float attackSpeed;
+    private float bulletLife = 3f;
+    private float bulletSpeed = 15f;
+    private float speed = 200f;
+    private float health = 100f;
+    public float dmg;
+
     public bool isGrounded
     {
-        //get => true;
-
         get => Physics2D.OverlapCircle(groundChecker.position, groundCheckDistance, groundLayer);
     }
 
-    Seeker seeker;
-    Rigidbody2D rb;
+    private void Awake()
+    {
+        SetEnemyType();
+    }
 
     private void Start()
     {
@@ -51,51 +61,140 @@ public class EnemyNavigation : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
 
         InvokeRepeating("UpdatePath", 0f, 0.5f);
-        InvokeRepeating("AIShoot", 0f, attackSpeed);
+    }
+
+    private void SetEnemyType()
+    {
+        this.gameObject.name = enemyType.name;
+
+        switch (enemyType.type)
+        {
+            case EnemyType.TypeOfEnemy.Archer:
+                bulletSpeed = 20f;
+                bulletLife = 20f;
+                speed = 300f;
+                attackSpeed = 6f;
+                health = 75f;
+                minChaseDistance = 15f;
+                maxChaseDistance = 40f;
+                dmg = 18f;
+                break;
+            case EnemyType.TypeOfEnemy.Rifter:
+                bulletSpeed = 30f;
+                bulletLife = 15f;
+                speed = 420f;
+                attackSpeed = 1f;
+                health = 145f;
+                minChaseDistance = 12f;
+                maxChaseDistance = 30f;
+                dmg = 32;
+                break;
+            case EnemyType.TypeOfEnemy.StormSoldier:
+                bulletSpeed = 30f;
+                bulletLife = 15f;
+                speed = 420f;
+                attackSpeed = 2f;
+                health = 200f;
+                minChaseDistance = 14f;
+                maxChaseDistance = 20f;
+                dmg = 27;
+                break;
+        }
+
+        Invoke("SetEnemyTier", 2f);
+        InvokeRepeating("AIShoot", 1f, attackSpeed);
+    }
+
+    private void SetEnemyTier()
+    {
+        this.gameObject.name += " - " + enemyTier.name;
+
+        switch (enemyTier.tier)
+        {
+            case EnemyTier.TierOfEnemy.Light:
+                break;
+            case EnemyTier.TierOfEnemy.Medium:
+                bulletSpeed += 3f;
+                bulletLife += 2f;
+                speed -= 20f;
+                health += 10f;
+                minChaseDistance -= 3f;
+                maxChaseDistance += 5f;
+                dmg += 2f;
+                break;
+            case EnemyTier.TierOfEnemy.Heavy:
+                bulletSpeed -= 3f;
+                speed -= 50f;
+                attackSpeed += 0.5f;
+                health += 35f;
+                minChaseDistance -= 4f;
+                maxChaseDistance -= 5f;
+                dmg += 6f;
+                break;
+            case EnemyTier.TierOfEnemy.SUPERHEAVY:
+                bulletSpeed -= 5f;
+                speed -= 50f;
+                attackSpeed += 1f;
+                health += 100f;
+                minChaseDistance += 6f;
+                maxChaseDistance += 15f;
+                dmg += 9f;
+                break;
+        }
+        healthBar.GetComponent<Slider>().maxValue = health;
+        healthBar.GetComponent<Slider>().value = health;
     }
 
     private void LookDirection()
     {
         Vector3 direction = target.position - barrel.position;
-        if (isLookingRight)
-        {
-            Quaternion rotation = Quaternion.FromToRotation(barrel.right, direction);
-            barrel.rotation = rotation * barrel.rotation;
-        }
-        else if (!isLookingRight)
-        {
-            Quaternion rotation = Quaternion.FromToRotation(-barrel.right, direction);
-            barrel.rotation = rotation * barrel.rotation;
-        }
+
+        Quaternion rotation = isLookingRight
+            ? Quaternion.FromToRotation(barrel.right, direction)
+            : Quaternion.FromToRotation(-barrel.right, direction);
+
+        barrel.rotation = rotation * barrel.rotation;
 
         if (direction.x < 0f)
         {
             transform.localScale = new Vector3(-1f, 2f, 1f);
             isLookingRight = false;
         }
-
         else if (direction.x > 0f)
         {
             transform.localScale = new Vector3(1f, 2f, 1f);
             isLookingRight = true;
         }
     }
-    
+
     private void AIShoot()
     {
-        Rigidbody2D rb = Instantiate(bullet, muzzle.position, barrel.rotation);
+        if (Vector2.Distance(rb.position, target.position) >= maxChaseDistance)
+            return;
+        Rigidbody2D rbBullet = Instantiate(bullet, muzzle.position, barrel.rotation);
 
-        //AudioManager.Play("shot");
         if (isLookingRight)
         {
-            rb.linearVelocity = barrel.right * bulletSpeed;
+            rbBullet.linearVelocity = barrel.right * bulletSpeed;
         }
-        else if (!isLookingRight)
+        else
         {
-            rb.linearVelocity = -barrel.right * bulletSpeed;
+            rbBullet.linearVelocity = -barrel.right * bulletSpeed;
         }
 
-        Destroy(rb.gameObject, bulletLife);
+        Destroy(rbBullet.gameObject, bulletLife);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        AudioManager.Play("EnemyDamage");
+        health -= damage;
+        healthBar.GetComponent<Slider>().value = health;
+
+        if (health <= 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     void UpdatePath()
@@ -109,27 +208,34 @@ public class EnemyNavigation : MonoBehaviour
         else
         {
             rb.linearVelocity = Vector2.zero;
-            path = null;
         }
-
     }
 
     private void FixedUpdate()
     {
         if (path == null)
+            return;
+
+        float distanceToPlayer = Vector2.Distance(rb.position, target.position);
+
+        
+        LookDirection();
+
+        if (distanceToPlayer <= minChaseDistance)
         {
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y); 
+            LookDirection(); 
             return;
         }
+
 
         if (currentWaypoint >= path.vectorPath.Count)
         {
             reachedEnd = true;
             return;
         }
-        else
-        {
-            reachedEnd = false;
-        }
+
+        reachedEnd = false;
 
         Vector2 direction = ((Vector2)path.vectorPath[currentWaypoint] - rb.position).normalized;
         Vector2 force = direction * speed * Time.deltaTime;
@@ -145,10 +251,6 @@ public class EnemyNavigation : MonoBehaviour
                 rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             }
         }
-
-        //------SHOOTING FUNCTIONALITY HERE-------//
-        LookDirection();
-
     }
 
     private void OnPathComplete(Path p)

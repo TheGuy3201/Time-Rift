@@ -47,6 +47,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54ac55793790b9f4b9c5c11585eb81d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EnemyDamage: 0
+  PlayerDamage: 25
+  audioName: BlastPistolSFX
 --- !u!212 &3979024083416491689
 SpriteRenderer:
   m_ObjectHideFlags: 0

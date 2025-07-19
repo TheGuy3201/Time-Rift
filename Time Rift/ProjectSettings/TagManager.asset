@@ -11,6 +11,11 @@ TagManager:
   - Ground
   - Bullet
   - TestAppearance
+  - DamageZone
+  - EDISPLAY
+  - Key
+  - Door
+  - KeyCount
   layers:
   - Default
   - TransparentFX

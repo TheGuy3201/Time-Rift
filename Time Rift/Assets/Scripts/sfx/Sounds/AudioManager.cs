@@ -26,7 +26,7 @@ public static class AudioManager
 {
     static List<AudioSource> sources;
     static Dictionary<string, Sound> sounds = new Dictionary<string, Sound>();
-    static int numOfSources = 5;
+    static int numOfSources = 20;
     static AudioManager()
     {
         sources = new List<AudioSource>();

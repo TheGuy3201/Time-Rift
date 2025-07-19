@@ -1,6 +1,4 @@
-using Mono.Cecil;
-using System.Threading;
-using Unity.VisualScripting;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,35 +12,43 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float groundCheckDistance = 0.2f; 
     [SerializeField] LayerMask groundLayer;
 
-    //Shooting Stuff
     [Header("Shooting")]
-
-    [SerializeField] Transform barrel;
+    public Transform barrel;
     [SerializeField] Transform muzzle;
-    [SerializeField] float bulletSpeed = 15f;
-    [SerializeField] float bulletLife = 3f;
+    public float bulletSpeed = 15f;
+    public float bulletLife = 3f;
+    public float damage = 25f;
+    public int ammoCapacity;
+    public int currentAmmo;
+    public string audioName;
     [SerializeField] Rigidbody2D bullet;
 
     [Header("Canvas UI")]
     [SerializeField] Transform uiCanvas;
     [SerializeField] GameObject healthBar;
+    public GameObject keyCountDisplay;
 
-    //float angleSpeed = 0.5f;
+    [SerializeField] GameObject EDisplay;
+    [SerializeField] TextMeshProUGUI ammoCountDisplay;
 
+    // Private variables
     private Rigidbody2D rb;
-
+    private Sprite ogSprite;
     private SpriteRenderer spriteRenderer;
     private bool isLookingRight = true;
-
     private Vector3 originalCanvasScale;
     private float healthAmount = 100f;
-    
+    public int keyCount;
+    public float reloadTime;
 
     public bool IsGrounded
     {
-        //get => true;
-       
         get => Physics2D.OverlapCircle(groundChecker.position, groundCheckDistance, groundLayer);
+    }
+
+    private void UpdateAmmoDisplay()
+    {
+        ammoCountDisplay.text = $"{currentAmmo} / {ammoCapacity}";
     }
 
     void Start()
@@ -50,6 +56,16 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         originalCanvasScale = uiCanvas.localScale;
+        
+        // Get the original sprite from the serialized EDisplay field
+        if (EDisplay != null)
+        {
+            SpriteRenderer eDisplaySprite = EDisplay.GetComponent<SpriteRenderer>();
+            if (eDisplaySprite != null)
+            {
+                ogSprite = eDisplaySprite.sprite;
+            }
+        }
     }
 
     void Update()
@@ -104,27 +120,47 @@ public class PlayerController : MonoBehaviour
         // Prevent canvas flip
         uiCanvas.localScale = originalCanvasScale;
 
+        // Handle ammo display
+        UpdateAmmoDisplay();
 
+        // Handle shooting
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             FireCannon();
+        }
+
+        // Reload only when R is pressed and ammo is not full
+        if (Input.GetKeyDown(KeyCode.R) && currentAmmo < ammoCapacity)
+        {
+            //AudioManager.Play("Reload");
+            currentAmmo = ammoCapacity;
         }
     }
 
     private void FireCannon()
     {
-        Rigidbody2D rb = Instantiate(bullet, muzzle.position, barrel.rotation);
-
-        if (isLookingRight)
-        { 
-            rb.linearVelocity = rb.transform.right * bulletSpeed; 
-        }
-        else if (!isLookingRight)
+        if (currentAmmo > 0)
         {
-            rb.linearVelocity = -rb.transform.right * bulletSpeed;
-        }
+            Rigidbody2D bulletRb = Instantiate(bullet, muzzle.position, barrel.rotation);
+            bulletRb.gameObject.GetComponent<BulletController>().DamageAmount = damage;
+            bulletRb.gameObject.GetComponent<BulletController>().audioName = audioName;
+            currentAmmo--;
 
-        Destroy(rb.gameObject, bulletLife);
+            if (isLookingRight)
+            {
+                bulletRb.linearVelocity = bulletRb.transform.right * bulletSpeed;
+            }
+            else
+            {
+                bulletRb.linearVelocity = -bulletRb.transform.right * bulletSpeed;
+            }
+
+            Destroy(bulletRb.gameObject, bulletLife);
+        }
+        else
+        {
+            AudioManager.Play("OutOfAmmo");
+        }
     }
 
     public void TakeDamage(float damage)
@@ -145,12 +181,14 @@ public class PlayerController : MonoBehaviour
     {
         AudioManager.Play("PlayerHeal");
         healthAmount += healingAmount;
-        healthBar.GetComponent<Slider>().value = healthAmount;
-
+        
+        // Clamp health to maximum
         if (healthAmount > 100)
         {
             healthAmount = 100;
         }
+        
+        healthBar.GetComponent<Slider>().value = healthAmount;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -158,6 +196,24 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.layer == 3)
         {
             AudioManager.Play("PlayerLanding");
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Key"))
+        {
+            keyCount++;
+            if (keyCountDisplay != null)
+            {
+                TextMeshProUGUI keyText = keyCountDisplay.GetComponent<TextMeshProUGUI>();
+                if (keyText != null)
+                {
+                    keyText.text = keyCount.ToString();
+                }
+            }
+            //AudioManager.Play("KeyPickup");
+            Destroy(other.gameObject);
         }
     }
 }

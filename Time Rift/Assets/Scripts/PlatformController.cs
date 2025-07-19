@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,6 +12,10 @@ public class PlatformController : MonoBehaviour
     [SerializeField] float amplitude = 1.7f;
     [SerializeField] float angleSpeed = 1f;
     [SerializeField] float waitTime = 0.02f;
+    [SerializeField] float damageFrequency = 2f;
+    [SerializeField] float damageAmount = 5f;
+
+    [SerializeField] GameObject EDisplay;
 
     GameObject captureObject;
     float originX;
@@ -18,6 +23,11 @@ public class PlatformController : MonoBehaviour
     float angle = 10f;
 
     GameObject[] platformsA;
+
+    GameObject playerInTrigger;
+    Coroutine damageCoroutine;
+    bool playerInTestAppearanceTrigger = false;
+
 
     private void Start()
     {
@@ -34,6 +44,25 @@ public class PlatformController : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (playerInTestAppearanceTrigger && Input.GetKeyDown(KeyCode.E))
+        {
+            if (GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().keyCount > 0)
+            {
+                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().keyCount--;
+                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().keyCountDisplay.GetComponent<TextMeshProUGUI>().text = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().keyCount + "";
+                SetPlatformAppearance(true);
+                //trigger door open code, temp is delete gameobject
+                //Destroy(other.gameObject);
+            }
+            else
+            {
+                Debug.Log("You need a key to open this door");
+            }
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
@@ -42,18 +71,46 @@ public class PlatformController : MonoBehaviour
             {
                 collision.transform.SetParent(transform);
             }
-            if (this.gameObject.CompareTag("TestAppearance"))
-            {
-                SetPlatformAppearance(true);
-            }
             if (this.gameObject.CompareTag("ForestFinish"))
             {
                 SceneManager.LoadScene("Corrupted Caverns");
             }
-            //if (this.gameObject.CompareTag("PainPlatform"))
-            //{
-            //    Debug.Log("Still in development!!");
-            //}
+            
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player") && this.gameObject.CompareTag("DamageZone"))
+        {
+            playerInTrigger = other.gameObject;
+            if (damageCoroutine == null)
+            {
+                damageCoroutine = StartCoroutine(DealDamageOverTime(playerInTrigger));
+            }
+        }
+        if (this.gameObject.CompareTag("TestAppearance") && other.CompareTag("Player"))
+        {
+            EDisplay.SetActive(true);
+            playerInTestAppearanceTrigger = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player") && this.gameObject.CompareTag("DamageZone"))
+        {
+            if (damageCoroutine != null)
+            {
+                StopCoroutine(damageCoroutine);
+                damageCoroutine = null;
+            }
+            playerInTrigger = null;
+        }
+        if (this.CompareTag("TestAppearance") && other.CompareTag("Player"))
+        {
+            EDisplay.SetActive(false);
+            playerInTestAppearanceTrigger = false;
         }
     }
 
@@ -89,10 +146,18 @@ public class PlatformController : MonoBehaviour
             {
                 captureObject.transform.position = transform.position;
             }
-
             yield return new WaitForSeconds(waitTime);
         }
     }
 
-    
+    private IEnumerator DealDamageOverTime(GameObject player)
+    {
+        while (true)
+        {
+            player.GetComponent<PlayerController>()?.TakeDamage(damageAmount);
+            yield return new WaitForSeconds(damageFrequency);
+        }
+    }
+
+
 }

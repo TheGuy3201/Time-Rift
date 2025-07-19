@@ -34,6 +34,28 @@ public class EnemyNavigation : MonoBehaviour
     Path path;
     int currentWaypoint = 0;
     bool reachedEnd = false;
+    bool hasValidPath = false;
+
+    private bool IsPlayerInsideAStarGrid()
+    {
+        // Get the AstarPath instance (the main pathfinding component)
+        if (AstarPath.active == null || AstarPath.active.data.graphs == null || AstarPath.active.data.graphs.Length == 0)
+            return false; // If no graphs, player is not inside
+
+        // Get the closest node to the player position
+        NNInfo info = AstarPath.active.GetNearest(target.position, NNConstraint.Default);
+        
+        if (info.node != null && info.node.Walkable)
+        {
+            // Calculate distance between player and closest walkable node
+            float distanceToNode = Vector3.Distance(target.position, (Vector3)info.node.position);
+            
+            // If player is close to a walkable node, they're inside the grid
+            return distanceToNode < 2f; // Adjust this threshold as needed
+        }
+        
+        return false; // Player is outside the grid
+    }
 
     private float minChaseDistance = 7f;
     private float maxChaseDistance = 30f;
@@ -141,6 +163,8 @@ public class EnemyNavigation : MonoBehaviour
                 dmg += 9f;
                 break;
         }
+
+        
         healthBar.GetComponent<Slider>().maxValue = health;
         healthBar.GetComponent<Slider>().value = health;
     }
@@ -169,9 +193,11 @@ public class EnemyNavigation : MonoBehaviour
 
     private void AIShoot()
     {
-        if (Vector2.Distance(rb.position, target.position) >= maxChaseDistance)
+        // Only shoot if player is inside the A* grid
+        if (Vector2.Distance(rb.position, target.position) >= maxChaseDistance || !hasValidPath || !IsPlayerInsideAStarGrid())
             return;
         Rigidbody2D rbBullet = Instantiate(bullet, muzzle.position, barrel.rotation);
+        rbBullet.gameObject.GetComponent<BulletController>().DamageAmount = dmg;
 
         if (isLookingRight)
         {
@@ -201,19 +227,22 @@ public class EnemyNavigation : MonoBehaviour
     {
         float distanceToPlayer = Vector2.Distance(rb.position, target.position);
 
-        if (distanceToPlayer <= maxChaseDistance && distanceToPlayer > minChaseDistance && seeker.IsDone())
+        // Only update path if player is inside the A* grid
+        if (distanceToPlayer <= maxChaseDistance && distanceToPlayer > minChaseDistance && seeker.IsDone() && IsPlayerInsideAStarGrid())
         {
             seeker.StartPath(rb.position, target.position, OnPathComplete);
         }
-        else
+        else if (distanceToPlayer > maxChaseDistance || !IsPlayerInsideAStarGrid())
         {
+            hasValidPath = false;
             rb.linearVelocity = Vector2.zero;
         }
     }
 
     private void FixedUpdate()
     {
-        if (path == null)
+        // Don't move if player is outside the A* grid
+        if (path == null || !hasValidPath || !IsPlayerInsideAStarGrid())
             return;
 
         float distanceToPlayer = Vector2.Distance(rb.position, target.position);
@@ -259,6 +288,12 @@ public class EnemyNavigation : MonoBehaviour
         {
             path = p;
             currentWaypoint = 0;
+            hasValidPath = true;
+        }
+        else
+        {
+            hasValidPath = false;
+            rb.linearVelocity = Vector2.zero;
         }
     }
 }

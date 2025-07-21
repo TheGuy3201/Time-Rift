@@ -15,4 +15,5 @@ MonoBehaviour:
   name: Storm Soldier
   type: 2
   weaponSprite: {fileID: 21300000, guid: 6058e2a50ae34af4584c484d326e4d18, type: 3}
+  bulletSprite: {fileID: 21300000, guid: f8c4b9d1495406149bc9ed9ed29e9a1f, type: 3}
   shootAudioName: BlastPistolSFX

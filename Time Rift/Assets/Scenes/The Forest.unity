@@ -8490,6 +8490,7 @@ MonoBehaviour:
   reloadTime: 2
   IsFullAuto: 0
   fireRate: 0.1
+  bulletSprite: {fileID: 0}
 --- !u!50 &1101793964
 Rigidbody2D:
   serializedVersion: 5

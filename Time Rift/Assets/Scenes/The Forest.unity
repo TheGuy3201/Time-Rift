@@ -3495,6 +3495,51 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &359976255
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 359976257}
+  - component: {fileID: 359976256}
+  m_Layer: 0
+  m_Name: Weapon (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &359976256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 359976255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee0765861e065b941b9e287bc8336474, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weapon: {fileID: 11400000, guid: 362f877f73e5bbb43bbc635664c12877, type: 2}
+--- !u!4 &359976257
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 359976255}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -32.2, y: -1.6, z: -0.23746729}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &384169874
 GameObject:
   m_ObjectHideFlags: 0
@@ -8443,6 +8488,8 @@ MonoBehaviour:
   ammoCountDisplay: {fileID: 394103717}
   keyCount: 0
   reloadTime: 2
+  IsFullAuto: 0
+  fireRate: 0.1
 --- !u!50 &1101793964
 Rigidbody2D:
   serializedVersion: 5
@@ -10107,7 +10154,7 @@ MonoBehaviour:
     mixer: {fileID: -2939687324124628828, guid: f50dc2050f690d846ab6c61615a0e885, type: 2}
   - name: CrystalShot
     volume: 0.65
-    pitch: 1
+    pitch: 1.19
     isLoop: 0
     clip: {fileID: 8300000, guid: 39c4c539a41087547801c21608094256, type: 3}
     mixer: {fileID: -2939687324124628828, guid: f50dc2050f690d846ab6c61615a0e885, type: 2}
@@ -10121,13 +10168,31 @@ MonoBehaviour:
     volume: 0.65
     pitch: 1
     isLoop: 0
-    clip: {fileID: 8300000, guid: 27afeb9b33ae45c40a741c6cdd70aaab, type: 3}
+    clip: {fileID: 8300000, guid: 0fb5df6947c1ef34bba05cefdca5b1fe, type: 3}
     mixer: {fileID: -2939687324124628828, guid: f50dc2050f690d846ab6c61615a0e885, type: 2}
   - name: PistolReload
     volume: 0.65
     pitch: 1
     isLoop: 0
     clip: {fileID: 8300000, guid: 483030a774cd19f4e948e17dfee1a5aa, type: 3}
+    mixer: {fileID: -2939687324124628828, guid: f50dc2050f690d846ab6c61615a0e885, type: 2}
+  - name: ScarabShot
+    volume: 0.38
+    pitch: 2.51
+    isLoop: 0
+    clip: {fileID: 8300000, guid: 39c4c539a41087547801c21608094256, type: 3}
+    mixer: {fileID: -2939687324124628828, guid: f50dc2050f690d846ab6c61615a0e885, type: 2}
+  - name: OutOfAmmo
+    volume: 0.72
+    pitch: 1
+    isLoop: 0
+    clip: {fileID: 8300000, guid: e1cdf9f37142f1c41b5a1e00cfe92f38, type: 3}
+    mixer: {fileID: -2939687324124628828, guid: f50dc2050f690d846ab6c61615a0e885, type: 2}
+  - name: CrossbowShoot
+    volume: 1
+    pitch: 1
+    isLoop: 0
+    clip: {fileID: 8300000, guid: 174e3c2870282bd4f8f04abb11929ee4, type: 3}
     mixer: {fileID: -2939687324124628828, guid: f50dc2050f690d846ab6c61615a0e885, type: 2}
 --- !u!4 &1318100398
 Transform:
@@ -14615,3 +14680,4 @@ SceneRoots:
   - {fileID: 309068619}
   - {fileID: 2114768351}
   - {fileID: 1315778772}
+  - {fileID: 359976257}

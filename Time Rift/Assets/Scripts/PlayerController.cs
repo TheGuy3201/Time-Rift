@@ -47,6 +47,8 @@ public class PlayerController : MonoBehaviour
     private bool isReloading = false;
     private float lastFireTime = 0f;
 
+    public Sprite bulletSprite;
+
     public bool IsGrounded
     {
         get => Physics2D.OverlapCircle(groundChecker.position, groundCheckDistance, groundLayer);
@@ -164,6 +166,7 @@ public class PlayerController : MonoBehaviour
             Rigidbody2D bulletRb = Instantiate(bullet, muzzle.position, barrel.rotation);
             bulletRb.gameObject.GetComponent<BulletController>().DamageAmount = damage;
             bulletRb.gameObject.GetComponent<BulletController>().audioName = audioName;
+            bulletRb.gameObject.GetComponent<SpriteRenderer>().sprite = bulletSprite;
             currentAmmo--;
 
             if (isLookingRight)

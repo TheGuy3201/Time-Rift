@@ -24,6 +24,7 @@ public class WeaponINIT : MonoBehaviour
             collider.gameObject.GetComponent<PlayerController>().audioName = weapon.audioName;
             collider.gameObject.GetComponent<PlayerController>().reloadAudio = weapon.reloadAudio;
             collider.gameObject.GetComponent<PlayerController>().IsFullAuto = weapon.isFullAuto;
+            collider.gameObject.GetComponent<PlayerController>().bulletSprite = weapon.bulletSprite;
 
             // Set the weapon display UI with the current weapon
             var gameplayUI = GameObject.Find("GameplayUI");

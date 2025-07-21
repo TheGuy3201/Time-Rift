@@ -7,8 +7,6 @@ public class EnemyType : ScriptableObject
     [Header("Enemy Details")]
     public new string name;
     //public Sprite characterSprite;
-    //public Sprite weaponSprite;
-
     public enum TypeOfEnemy
     {
         Archer,
@@ -17,4 +15,8 @@ public class EnemyType : ScriptableObject
     }
     [Tooltip("Select enemy type")]
     public TypeOfEnemy type;
+
+    public Sprite weaponSprite;
+    public Sprite bulletSprite;
+    public string shootAudioName;
 }

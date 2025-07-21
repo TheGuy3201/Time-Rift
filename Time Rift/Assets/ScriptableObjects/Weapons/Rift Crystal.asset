@@ -18,6 +18,7 @@ MonoBehaviour:
   ammoCapacity: 62
   reloadTime: 2.3
   bulletSpeed: 25
-  weaponSprite: {fileID: 0}
-  audioName: RiftShot
+  weaponSprite: {fileID: 21300000, guid: 4edf8584842dd044db14e53235f20a96, type: 3}
+  audioName: CrystalShot
   reloadAudio: RiftReload
+  isFullAuto: 1

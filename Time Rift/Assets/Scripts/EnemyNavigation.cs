@@ -59,13 +59,12 @@ public class EnemyNavigation : MonoBehaviour
 
     private float minChaseDistance = 7f;
     private float maxChaseDistance = 30f;
-
+    private string shootAudioName;
     private float attackSpeed;
     private float bulletLife = 3f;
     private float bulletSpeed = 15f;
     private float speed = 200f;
     private float health = 100f;
-    private Sprite weaponSprite;
     public float dmg;
 
     public bool isGrounded
@@ -101,7 +100,7 @@ public class EnemyNavigation : MonoBehaviour
                 minChaseDistance = 15f;
                 maxChaseDistance = 40f;
                 dmg = 18f;
-                //weaponSprite = 
+                
                 break;
             case EnemyType.TypeOfEnemy.Rifter:
                 bulletSpeed = 30f;
@@ -124,6 +123,8 @@ public class EnemyNavigation : MonoBehaviour
                 dmg = 27;
                 break;
         }
+        barrel.GetComponent<SpriteRenderer>().sprite = enemyType.weaponSprite;
+        shootAudioName = enemyType.shootAudioName;
 
         Invoke("SetEnemyTier", 2f);
         InvokeRepeating("AIShoot", 1f, attackSpeed);
@@ -200,6 +201,8 @@ public class EnemyNavigation : MonoBehaviour
             return;
         Rigidbody2D rbBullet = Instantiate(bullet, muzzle.position, barrel.rotation);
         rbBullet.gameObject.GetComponent<BulletController>().DamageAmount = dmg;
+        rbBullet.gameObject.GetComponent<BulletController>().audioName = shootAudioName;
+        rbBullet.gameObject.GetComponent<SpriteRenderer>().sprite = enemyType.bulletSprite;
 
         if (isLookingRight)
         {

@@ -24,4 +24,6 @@ public class Weapon : ScriptableObject
 
     public string reloadAudio;
     public bool isFullAuto;
+
+    public Sprite bulletSprite;
 }

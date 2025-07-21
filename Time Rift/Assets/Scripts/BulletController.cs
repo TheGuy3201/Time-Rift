@@ -5,8 +5,6 @@ public class BulletController : MonoBehaviour
     public float DamageAmount;
     public string audioName = "BlastPistolSFX"; 
 
-    
-
     private void Start()
     {
         AudioManager.Play(audioName);

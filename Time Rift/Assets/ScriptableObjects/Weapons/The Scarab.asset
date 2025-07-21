@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: The Scarab
   m_EditorClassIdentifier: 
   weaponName: The Scarab
-  damage: 9999
+  damage: 10
   range: 9999
   ammoCapacity: 9999
   reloadTime: 0
   bulletSpeed: 123
-  weaponSprite: {fileID: 0}
+  weaponSprite: {fileID: 21300000, guid: 644350862aca5904fa50e9995d02eb5d, type: 3}
   audioName: ScarabShot
-  reloadAudio: ScarabReload
+  reloadAudio: PistolReload
+  isFullAuto: 1

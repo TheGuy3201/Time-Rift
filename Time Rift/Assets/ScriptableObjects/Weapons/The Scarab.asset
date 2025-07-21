@@ -19,4 +19,5 @@ MonoBehaviour:
   reloadTime: 0
   bulletSpeed: 123
   weaponSprite: {fileID: 0}
-  audioName: BlastPistolSFX
+  audioName: ScarabShot
+  reloadAudio: ScarabReload

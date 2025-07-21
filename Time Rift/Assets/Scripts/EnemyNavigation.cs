@@ -65,6 +65,7 @@ public class EnemyNavigation : MonoBehaviour
     private float bulletSpeed = 15f;
     private float speed = 200f;
     private float health = 100f;
+    private Sprite weaponSprite;
     public float dmg;
 
     public bool isGrounded
@@ -100,6 +101,7 @@ public class EnemyNavigation : MonoBehaviour
                 minChaseDistance = 15f;
                 maxChaseDistance = 40f;
                 dmg = 18f;
+                //weaponSprite = 
                 break;
             case EnemyType.TypeOfEnemy.Rifter:
                 bulletSpeed = 30f;

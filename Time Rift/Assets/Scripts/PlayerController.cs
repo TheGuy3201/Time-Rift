@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
     public int ammoCapacity;
     public int currentAmmo;
     public string audioName;
+
+    public string reloadAudio;
     [SerializeField] Rigidbody2D bullet;
 
     [Header("Canvas UI")]
@@ -40,6 +42,10 @@ public class PlayerController : MonoBehaviour
     private float healthAmount = 100f;
     public int keyCount;
     public float reloadTime;
+    public bool IsFullAuto;
+    public float fireRate = 0.1f; // Time between shots (0.1f = 10 bullets per second)
+    private bool isReloading = false;
+    private float lastFireTime = 0f;
 
     public bool IsGrounded
     {
@@ -124,17 +130,31 @@ public class PlayerController : MonoBehaviour
         UpdateAmmoDisplay();
 
         // Handle shooting
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !IsFullAuto)
         {
             FireCannon();
         }
-
-        // Reload only when R is pressed and ammo is not full
-        if (Input.GetKeyDown(KeyCode.R) && currentAmmo < ammoCapacity)
+        else if(Input.GetKey(KeyCode.Mouse0) && IsFullAuto && Time.time >= lastFireTime + fireRate)
         {
-            //AudioManager.Play("Reload");
-            currentAmmo = ammoCapacity;
+            FireCannon();
+            lastFireTime = Time.time;
         }
+
+        // Reload only when R is pressed, ammo is not full, and not already reloading
+            if (Input.GetKeyDown(KeyCode.R) && currentAmmo < ammoCapacity && !isReloading)
+            {
+                StartCoroutine(ReloadCoroutine());
+            }
+    }
+
+    private System.Collections.IEnumerator ReloadCoroutine()
+    {
+        isReloading = true;
+        // Optionally play reload SFX here
+        AudioManager.Play(reloadAudio);
+        yield return new WaitForSeconds(reloadTime);
+        currentAmmo = ammoCapacity;
+        isReloading = false;
     }
 
     private void FireCannon()

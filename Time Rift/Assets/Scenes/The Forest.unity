@@ -8434,6 +8434,7 @@ MonoBehaviour:
   ammoCapacity: 999
   currentAmmo: 5
   audioName: BlastPistolSFX
+  reloadAudio: 
   bullet: {fileID: 5717160630890098078, guid: 7f8bb31d1a4b99e459dbe9f261f7e88c, type: 3}
   uiCanvas: {fileID: 1126702383}
   healthBar: {fileID: 239004002}
@@ -10109,6 +10110,24 @@ MonoBehaviour:
     pitch: 1
     isLoop: 0
     clip: {fileID: 8300000, guid: 39c4c539a41087547801c21608094256, type: 3}
+    mixer: {fileID: -2939687324124628828, guid: f50dc2050f690d846ab6c61615a0e885, type: 2}
+  - name: RailgunReload
+    volume: 0.65
+    pitch: 1
+    isLoop: 0
+    clip: {fileID: 8300000, guid: 27afeb9b33ae45c40a741c6cdd70aaab, type: 3}
+    mixer: {fileID: -2939687324124628828, guid: f50dc2050f690d846ab6c61615a0e885, type: 2}
+  - name: RiftReload
+    volume: 0.65
+    pitch: 1
+    isLoop: 0
+    clip: {fileID: 8300000, guid: 27afeb9b33ae45c40a741c6cdd70aaab, type: 3}
+    mixer: {fileID: -2939687324124628828, guid: f50dc2050f690d846ab6c61615a0e885, type: 2}
+  - name: PistolReload
+    volume: 0.65
+    pitch: 1
+    isLoop: 0
+    clip: {fileID: 8300000, guid: 483030a774cd19f4e948e17dfee1a5aa, type: 3}
     mixer: {fileID: -2939687324124628828, guid: f50dc2050f690d846ab6c61615a0e885, type: 2}
 --- !u!4 &1318100398
 Transform:

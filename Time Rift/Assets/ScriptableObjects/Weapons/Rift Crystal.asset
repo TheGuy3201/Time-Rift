@@ -20,3 +20,4 @@ MonoBehaviour:
   bulletSpeed: 25
   weaponSprite: {fileID: 0}
   audioName: RiftShot
+  reloadAudio: RiftReload

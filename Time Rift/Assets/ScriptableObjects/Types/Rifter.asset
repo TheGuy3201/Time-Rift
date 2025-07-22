@@ -15,5 +15,5 @@ MonoBehaviour:
   name: Rifter
   type: 1
   weaponSprite: {fileID: 21300000, guid: 4edf8584842dd044db14e53235f20a96, type: 3}
-  bulletSprite: {fileID: 5538487446649018516, guid: d057abac83b3d1340a36ab8a81f7619e, type: 3}
+  bulletSprite: {fileID: 21300000, guid: d057abac83b3d1340a36ab8a81f7619e, type: 3}
   shootAudioName: CrystalShot

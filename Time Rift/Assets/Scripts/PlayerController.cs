@@ -238,5 +238,10 @@ public class PlayerController : MonoBehaviour
             //AudioManager.Play("KeyPickup");
             Destroy(other.gameObject);
         }
+        else if (other.CompareTag("HealthPickup"))
+        {
+            Heal(20);
+            Destroy(other.gameObject);
+        }
     }
 }

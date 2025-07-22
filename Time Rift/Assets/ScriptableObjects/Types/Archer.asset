@@ -15,5 +15,5 @@ MonoBehaviour:
   name: Archer
   type: 0
   weaponSprite: {fileID: 21300000, guid: 0b17f2e491d564941afe1c842f94f60e, type: 3}
-  bulletSprite: {fileID: -765150924802650856, guid: 6c129ca16b175d0428a717ff46d0b3b7, type: 3}
+  bulletSprite: {fileID: 21300000, guid: 6c129ca16b175d0428a717ff46d0b3b7, type: 3}
   shootAudioName: CrossbowShoot

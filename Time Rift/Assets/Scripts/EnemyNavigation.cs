@@ -164,6 +164,7 @@ public class EnemyNavigation : MonoBehaviour
                 minChaseDistance += 6f;
                 maxChaseDistance += 15f;
                 dmg += 9f;
+                this.gameObject.transform.localScale = new Vector3(4f, 6f, 1f);
                 break;
         }
 

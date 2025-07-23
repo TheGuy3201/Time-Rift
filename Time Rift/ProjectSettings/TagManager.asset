@@ -16,6 +16,8 @@ TagManager:
   - Key
   - Door
   - KeyCount
+  - HealthPickup
+  - Dissapear
   layers:
   - Default
   - TransparentFX

@@ -15,7 +15,7 @@ MonoBehaviour:
   weaponName: Blast Pistol
   damage: 10
   range: 4
-  ammoCapacity: 999
+  ammoCapacity: 23
   reloadTime: 2.3
   bulletSpeed: 15
   weaponSprite: {fileID: 380655097320864239, guid: bae12c09f183b4341b7b8e28aa8b5b89, type: 3}

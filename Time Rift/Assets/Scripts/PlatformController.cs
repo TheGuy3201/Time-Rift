@@ -75,6 +75,10 @@ public class PlatformController : MonoBehaviour
             {
                 SceneManager.LoadScene("Corrupted Caverns");
             }
+            if (this.gameObject.CompareTag("Dissapear"))
+            {
+                Destroy(this.gameObject);
+            }
             
         }
     }

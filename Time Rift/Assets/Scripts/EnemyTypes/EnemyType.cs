@@ -1,4 +1,5 @@
 using Unity.VisualScripting;
+using UnityEditor.Animations;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "EnemyType", menuName = "Enemies/EnemyType")]
@@ -17,6 +18,10 @@ public class EnemyType : ScriptableObject
     public TypeOfEnemy type;
 
     public Sprite weaponSprite;
+    public AnimatorController AnimController;
     public Sprite bulletSprite;
+    public Sprite characterSprite;
     public string shootAudioName;
+
+    
 }

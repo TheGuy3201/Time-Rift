@@ -87,6 +87,8 @@ public class EnemyNavigation : MonoBehaviour
 
     private void SetEnemyType()
     {
+        Animator childAnimator = gameObject.GetComponentInChildren<Animator>();
+        SpriteRenderer spriteRenderer = gameObject.GetComponentInChildren<SpriteRenderer>();
         gameObject.name = enemyType.name;
 
         switch (enemyType.type)
@@ -100,7 +102,6 @@ public class EnemyNavigation : MonoBehaviour
                 minChaseDistance = 15f;
                 maxChaseDistance = 40f;
                 dmg = 18f;
-                
                 break;
             case EnemyType.TypeOfEnemy.Rifter:
                 bulletSpeed = 30f;
@@ -123,6 +124,8 @@ public class EnemyNavigation : MonoBehaviour
                 dmg = 27;
                 break;
         }
+        spriteRenderer.sprite = enemyType.characterSprite;
+        childAnimator.runtimeAnimatorController = enemyType.AnimController;
         barrel.GetComponent<SpriteRenderer>().sprite = enemyType.weaponSprite;
         shootAudioName = enemyType.shootAudioName;
 
@@ -132,6 +135,7 @@ public class EnemyNavigation : MonoBehaviour
 
     private void SetEnemyTier()
     {
+        SpriteRenderer spriteRenderer = gameObject.GetComponentInChildren<SpriteRenderer>();
         gameObject.name += " - " + enemyTier.name;
 
         switch (enemyTier.tier)
@@ -146,6 +150,7 @@ public class EnemyNavigation : MonoBehaviour
                 minChaseDistance -= 3f;
                 maxChaseDistance += 5f;
                 dmg += 2f;
+                spriteRenderer.color = new Color(1f, 1f, 0.5f); // Light yellow
                 break;
             case EnemyTier.TierOfEnemy.Heavy:
                 bulletSpeed -= 3f;
@@ -155,6 +160,7 @@ public class EnemyNavigation : MonoBehaviour
                 minChaseDistance -= 4f;
                 maxChaseDistance -= 5f;
                 dmg += 6f;
+                spriteRenderer.color = new Color(1f, 0.5f, 0.5f); // Light red
                 break;
             case EnemyTier.TierOfEnemy.SUPERHEAVY:
                 bulletSpeed -= 5f;
@@ -164,7 +170,8 @@ public class EnemyNavigation : MonoBehaviour
                 minChaseDistance += 6f;
                 maxChaseDistance += 15f;
                 dmg += 9f;
-                gameObject.transform.localScale = new Vector3(4f, 6f, 1f);
+                spriteRenderer.color = new Color(0.5f, 0f, 0f); // Dark red
+                //gameObject.transform.localScale = new Vector3(4f, 6f, 1f);
                 break;
         }
 

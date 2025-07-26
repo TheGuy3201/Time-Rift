@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Sprite ogSprite;
     private SpriteRenderer spriteRenderer;
+    private Animator playerAnimator;
     private bool isLookingRight = true;
     private Vector3 originalCanvasScale;
     private float healthAmount = 100f;
@@ -65,6 +66,13 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         originalCanvasScale = uiCanvas.localScale;
         
+        // Cache the Animator component from the Player child object
+        Transform playerTransform = transform.Find("Player");
+        if (playerTransform != null)
+        {
+            playerAnimator = playerTransform.GetComponent<Animator>();
+        }
+        
         // Get the original sprite from the serialized EDisplay field
         if (EDisplay != null)
         {
@@ -82,14 +90,32 @@ public class PlayerController : MonoBehaviour
         // Get Horizontal Input
         float movementDirection = Input.GetAxis("Horizontal");
 
+        // Set animation parameter based on movement
+        if (playerAnimator != null)
+        {
+            // Use the absolute value of movementDirection for walking animation
+            playerAnimator.SetFloat("PlayerMoveX", Mathf.Abs(movementDirection));
+        }
+
         // Apply Movement
         rb.linearVelocity = new Vector2(movementDirection * movementSpeed, rb.linearVelocity.y);
-        spriteRenderer.flipX = rb.linearVelocity.x < 0;
 
         // Jump
         if (Input.GetButtonDown("Jump") && IsGrounded)
         {
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            if (playerAnimator != null)
+                playerAnimator.SetBool("IsJumping", true);
+        }
+        else if (!IsGrounded)
+        {
+            if (playerAnimator != null)
+                playerAnimator.SetBool("IsJumping", true);
+        }
+        else if (IsGrounded)
+        {
+            if (playerAnimator != null)
+                playerAnimator.SetBool("IsJumping", false);
         }
 
         //------SHOOTING-------//
@@ -116,12 +142,12 @@ public class PlayerController : MonoBehaviour
 
         if (direction.x < 0f)
         {
-            transform.localScale = new Vector3(-1f, 2f, 1f);
+            transform.localScale = new Vector3(-1f, 1f, 1f);
             isLookingRight = false;
         }
         else if (direction.x > 0f)
         {
-            transform.localScale = new Vector3(1f, 2f, 1f);
+            transform.localScale = new Vector3(1f, 1f, 1f);
             isLookingRight = true;
         }
 

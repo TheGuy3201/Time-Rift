@@ -46,12 +46,19 @@ public class PlatformController : MonoBehaviour
 
     private void Update()
     {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        Animator childAnimator = player.GetComponentInChildren<Animator>();
+
         if (playerInTestAppearanceTrigger && Input.GetKeyDown(KeyCode.E))
         {
-            if (GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().keyCount > 0)
+            if (player.GetComponent<PlayerController>().keyCount > 0)
             {
-                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().keyCount--;
-                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().keyCountDisplay.GetComponent<TextMeshProUGUI>().text = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().keyCount + "";
+                player.GetComponent<PlayerController>().keyCount--;
+                player.GetComponent<PlayerController>().keyCountDisplay.GetComponent<TextMeshProUGUI>().text = player.GetComponent<PlayerController>().keyCount + "";
+                if (childAnimator != null)
+                {
+                    childAnimator.SetBool("IsInteracting", true);
+                }
                 SetPlatformAppearance(true);
                 //trigger door open code, temp is delete gameobject
                 //Destroy(other.gameObject);
@@ -60,6 +67,9 @@ public class PlatformController : MonoBehaviour
             {
                 Debug.Log("You need a key to open this door");
             }
+            childAnimator.SetBool("IsInteracting", false);
+
+
         }
     }
 
@@ -69,11 +79,17 @@ public class PlatformController : MonoBehaviour
         {
             if (this.gameObject.CompareTag("MovingPlatform"))
             {
+                Vector3 originalScale = collision.transform.localScale;
                 collision.transform.SetParent(transform);
+                collision.transform.localScale = originalScale; // Preserve player's original scale
             }
             if (this.gameObject.CompareTag("ForestFinish"))
             {
                 SceneManager.LoadScene("Corrupted Caverns");
+            }
+            if (this.gameObject.CompareTag("Cavern Finish"))
+            {
+                SceneManager.LoadScene("San Valencia");
             }
             if (this.gameObject.CompareTag("Dissapear"))
             {
@@ -124,7 +140,9 @@ public class PlatformController : MonoBehaviour
         {
             if (collision.gameObject.CompareTag("Player"))
             {
+                Vector3 originalScale = collision.transform.localScale;
                 collision.transform.SetParent(null);
+                collision.transform.localScale = originalScale; // Preserve player's scale when unparenting
             }
         }
     }
@@ -144,11 +162,13 @@ public class PlatformController : MonoBehaviour
         {
             angle += angleSpeed;
             float deltaX = Mathf.Sin(angle) * amplitude;
-            transform.position = new Vector2(originX + deltaX, originY);
+            Vector2 newPosition = new Vector2(originX + deltaX, originY);
+            transform.position = newPosition;
 
             if (captureObject != null)
             {
-                captureObject.transform.position = transform.position;
+                // Only move the captured object, do not modify its scale
+                captureObject.transform.position = newPosition;
             }
             yield return new WaitForSeconds(waitTime);
         }

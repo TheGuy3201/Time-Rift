@@ -18,6 +18,7 @@ TagManager:
   - KeyCount
   - HealthPickup
   - Dissapear
+  - Cavern Finish
   layers:
   - Default
   - TransparentFX

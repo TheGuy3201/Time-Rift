@@ -87,7 +87,7 @@ public class EnemyNavigation : MonoBehaviour
 
     private void SetEnemyType()
     {
-        this.gameObject.name = enemyType.name;
+        gameObject.name = enemyType.name;
 
         switch (enemyType.type)
         {
@@ -132,7 +132,7 @@ public class EnemyNavigation : MonoBehaviour
 
     private void SetEnemyTier()
     {
-        this.gameObject.name += " - " + enemyTier.name;
+        gameObject.name += " - " + enemyTier.name;
 
         switch (enemyTier.tier)
         {
@@ -164,7 +164,7 @@ public class EnemyNavigation : MonoBehaviour
                 minChaseDistance += 6f;
                 maxChaseDistance += 15f;
                 dmg += 9f;
-                this.gameObject.transform.localScale = new Vector3(4f, 6f, 1f);
+                gameObject.transform.localScale = new Vector3(4f, 6f, 1f);
                 break;
         }
 
@@ -185,12 +185,12 @@ public class EnemyNavigation : MonoBehaviour
 
         if (direction.x < 0f)
         {
-            transform.localScale = new Vector3(-1f, 2f, 1f);
+            transform.localScale = new Vector3(-1f, 1f, 1f);
             isLookingRight = false;
         }
         else if (direction.x > 0f)
         {
-            transform.localScale = new Vector3(1f, 2f, 1f);
+            transform.localScale = new Vector3(1f, 1f, 1f);
             isLookingRight = true;
         }
     }
@@ -225,7 +225,7 @@ public class EnemyNavigation : MonoBehaviour
 
         if (health <= 0)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
     }
 

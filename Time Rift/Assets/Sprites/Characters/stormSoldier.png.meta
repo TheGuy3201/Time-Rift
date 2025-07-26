@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 7777f6f4ed2cbaa4889d0bf9e430309a
+guid: fcc24987114e17644925c68a53c6166a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5928733335655651314
-    second: t-pose inspiration_0
+      213: -3241049695847588870
+    second: stormSoldier_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,12 +46,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 650
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: t-pose inspiration_0
+      name: stormSoldier_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1920
-        height: 2046
+        x: 63
+        y: 61
+        width: 819
+        height: 1348
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e086a386178e8bda0800000000000000
-      internalID: -5928733335655651314
+      spriteID: afbdd93397a7503d0800000000000000
+      internalID: -3241049695847588870
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      stormSoldier_0: -3241049695847588870
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

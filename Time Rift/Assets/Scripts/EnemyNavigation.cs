@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.U2D.Animation;
 
 public class EnemyNavigation : MonoBehaviour
 {
@@ -82,6 +83,20 @@ public class EnemyNavigation : MonoBehaviour
         seeker = GetComponent<Seeker>();
         rb = GetComponent<Rigidbody2D>();
 
+        // Auto-assign Player transform if not set
+        if (target == null)
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+            {
+                target = playerObj.transform;
+            }
+            else
+            {
+                Debug.LogWarning($"EnemyNavigation could not find Player GameObject with tag 'Player'.");
+            }
+        }
+
         InvokeRepeating("UpdatePath", 0f, 0.5f);
     }
 
@@ -89,11 +104,21 @@ public class EnemyNavigation : MonoBehaviour
     {
         Animator childAnimator = gameObject.GetComponentInChildren<Animator>();
         SpriteRenderer spriteRenderer = gameObject.GetComponentInChildren<SpriteRenderer>();
+        Transform rootBone = gameObject.GetComponentInChildren<Transform>();
+        foreach (Transform child in gameObject.GetComponentsInChildren<Transform>())
+        {
+            if (child.name == "Root" || child.name == "Head")
+            {
+                rootBone = child;
+                break;
+            }
+        }
         gameObject.name = enemyType.name;
 
         switch (enemyType.type)
         {
             case EnemyType.TypeOfEnemy.Archer:
+                // Archer specific settings
                 bulletSpeed = 20f;
                 bulletLife = 20f;
                 speed = 300f;
@@ -104,6 +129,7 @@ public class EnemyNavigation : MonoBehaviour
                 dmg = 18f;
                 break;
             case EnemyType.TypeOfEnemy.Rifter:
+                // Rifter specific settings
                 bulletSpeed = 30f;
                 bulletLife = 15f;
                 speed = 420f;
@@ -112,8 +138,10 @@ public class EnemyNavigation : MonoBehaviour
                 minChaseDistance = 12f;
                 maxChaseDistance = 30f;
                 dmg = 32;
+                
                 break;
             case EnemyType.TypeOfEnemy.StormSoldier:
+                // StormSoldier specific settings
                 bulletSpeed = 30f;
                 bulletLife = 15f;
                 speed = 420f;
@@ -122,6 +150,13 @@ public class EnemyNavigation : MonoBehaviour
                 minChaseDistance = 14f;
                 maxChaseDistance = 20f;
                 dmg = 27;
+                
+                // Add StormSoldier-specific components
+                var spriteSkin = gameObject.GetComponentInChildren<SpriteSkin>();
+                if (spriteSkin != null && !spriteSkin.autoRebind)
+                {
+                    spriteSkin.SetRootBone(rootBone);
+                }
                 break;
         }
         spriteRenderer.sprite = enemyType.characterSprite;
@@ -252,28 +287,35 @@ public class EnemyNavigation : MonoBehaviour
         }
     }
 
+    float previousX;
     private void FixedUpdate()
     {
         // Don't move if player is outside the A* grid
         if (path == null || !hasValidPath || !IsPlayerInsideAStarGrid())
             return;
 
+        Animator childAnimator = gameObject.GetComponentInChildren<Animator>();
+
         float distanceToPlayer = Vector2.Distance(rb.position, target.position);
 
-        
         LookDirection();
 
         if (distanceToPlayer <= minChaseDistance)
         {
             rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y); 
             LookDirection(); 
+            if (childAnimator != null && (enemyType.type == EnemyType.TypeOfEnemy.Archer || enemyType.type == EnemyType.TypeOfEnemy.StormSoldier))
+                childAnimator.SetBool("IsMove", false);
+            previousX = transform.position.x;
             return;
         }
-
 
         if (currentWaypoint >= path.vectorPath.Count)
         {
             reachedEnd = true;
+            if (childAnimator != null && (enemyType.type == EnemyType.TypeOfEnemy.Archer || enemyType.type == EnemyType.TypeOfEnemy.StormSoldier))
+                childAnimator.SetBool("IsMove", false);
+            previousX = transform.position.x;
             return;
         }
 
@@ -284,6 +326,21 @@ public class EnemyNavigation : MonoBehaviour
 
         rb.AddForce(force);
 
+        // Set walk animation only when actively moving towards the player
+        if (childAnimator != null && (enemyType.type == EnemyType.TypeOfEnemy.Archer || enemyType.type == EnemyType.TypeOfEnemy.StormSoldier))
+        {
+            bool isMoving = distanceToPlayer > minChaseDistance && distanceToPlayer < maxChaseDistance;
+            childAnimator.SetBool("IsMove", isMoving);
+            // Set jump animation based on grounded state
+            childAnimator.SetBool("IsJump", !isGrounded);
+            if (!isMoving)
+            {
+                childAnimator.SetBool("IsJump", false);
+
+            }
+        }
+        previousX = transform.position.x;
+
         float distance = Vector2.Distance(rb.position, path.vectorPath[currentWaypoint]);
         if (distance < nextPointDistance)
         {
@@ -293,6 +350,7 @@ public class EnemyNavigation : MonoBehaviour
                 rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             }
         }
+        
     }
 
     private void OnPathComplete(Path p)
